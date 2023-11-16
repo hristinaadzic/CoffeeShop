@@ -43,6 +43,8 @@ namespace CoffeeShop.Implementation
             try
             {
                 var stopwatch = new Stopwatch();
+
+
                 stopwatch.Start();
 
                 var response = query.Execute(data);

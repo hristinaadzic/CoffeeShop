@@ -12,6 +12,6 @@ namespace CoffeeShop.Domain
         public int IngredientId { get; set; }
         public Baverage Baverage { get; set; }
         public Ingredient Ingredient { get; set; }
-        public ICollection<BaverageIngredientSize> BaverageIngredientSizes { get; set; }
+        //public ICollection<BaverageIngredientSize> BaverageIngredientSizes { get; set; }
     }
 }

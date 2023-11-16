@@ -18,10 +18,16 @@ namespace CoffeeShop.DataAccess.Configurations
             builder.Property(x => x.CategoryId).IsRequired().HasMaxLength(10);
 
             builder.HasIndex(x => x.BaverageName);
+            builder.HasIndex(x => x.Description);
 
             builder.HasMany(x => x.BaverageIngredients)
                     .WithOne(x => x.Baverage)
                     .HasForeignKey(x => x.BavarageId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(x => x.BaverageSizes)
+                    .WithOne(x => x.Baverage)
+                    .HasForeignKey(x => x.BaverageId)
                     .OnDelete(DeleteBehavior.Restrict);
         }
     }

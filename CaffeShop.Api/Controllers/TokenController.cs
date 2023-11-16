@@ -7,7 +7,7 @@ namespace CoffeeShop.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class TokenController : ControllerBase
     {
         private readonly JwtManager _manager;

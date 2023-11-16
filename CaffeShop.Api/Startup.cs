@@ -2,21 +2,31 @@ using CoffeeShop.Api.Core;
 using CoffeeShop.Api.Extensions;
 using CoffeeShop.Application.Emails;
 using CoffeeShop.Application.Logging;
+using CoffeeShop.Application.UseCases.Commands.Baverages;
 using CoffeeShop.Application.UseCases.Commands.Categories;
 using CoffeeShop.Application.UseCases.Commands.Ingredients;
+using CoffeeShop.Application.UseCases.Commands.Orders;
+using CoffeeShop.Application.UseCases.Commands.Reservations;
 using CoffeeShop.Application.UseCases.Commands.User;
+using CoffeeShop.Application.UseCases.Queries.Baverages;
 using CoffeeShop.Application.UseCases.Queries.Categories;
 using CoffeeShop.Application.UseCases.Queries.Ingredients;
+using CoffeeShop.Application.UseCases.Queries.Reservations;
 using CoffeeShop.Application.UseCases.Queries.Users;
 using CoffeeShop.DataAccess;
 using CoffeeShop.Implementation;
 using CoffeeShop.Implementation.Emails;
 using CoffeeShop.Implementation.Logging;
+using CoffeeShop.Implementation.UseCases.Commands.Baverage;
 using CoffeeShop.Implementation.UseCases.Commands.Categories;
 using CoffeeShop.Implementation.UseCases.Commands.Ingredients;
+using CoffeeShop.Implementation.UseCases.Commands.Orders;
+using CoffeeShop.Implementation.UseCases.Commands.Reservations;
 using CoffeeShop.Implementation.UseCases.Commands.User;
 using CoffeeShop.Implementation.UseCases.Queries;
+using CoffeeShop.Implementation.UseCases.Queries.Baverage;
 using CoffeeShop.Implementation.UseCases.Queries.Ingredients;
+using CoffeeShop.Implementation.UseCases.Queries.Reservations;
 using CoffeeShop.Implementation.UseCases.Queries.Users;
 using CoffeeShop.Implementation.Validators;
 using Microsoft.AspNetCore.Builder;
@@ -95,7 +105,16 @@ namespace CaffeShop.Api
             services.AddTransient<IUpdateUserCommand, UpdateUserCommand>();
             services.AddTransient<IGetUsersQuery, GetUsersQuery>();
             services.AddTransient<IChangeStatusOfUserCommand, ChangeStatusOfUserCommand>();
-            
+
+            services.AddTransient<CreateBaverageValidator>();
+            services.AddTransient<IGetBaveragesQuery, GetBaveragesQuery>();
+            services.AddTransient<IGetOneBaverageQuery, GetOneBaverageQuery>();
+            services.AddTransient<ICreateBaverageCommand, CreateBaverageCommand>();
+
+            services.AddTransient<ICreateReservationCommand, CreateReservationCommand>();
+            services.AddTransient<IGetReservationQuery, GetReservationsQuery>();
+
+            services.AddTransient<ICreateOrderCommand, CreateOrderCommand>();
             
             services.AddTransient<IExceptionLogger, ConsoleExceptionLogger>();
             services.AddTransient<UseCaseHandler>();
@@ -123,6 +142,8 @@ namespace CaffeShop.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CoffeeShop.Api v1"));
             }
+
+            app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
 
             app.UseRouting();
             app.UseMiddleware<GlobalExceptionHandler>();

@@ -96,6 +96,7 @@ namespace CoffeeShop.DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BaverageName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CategoryId = table.Column<int>(type: "int", maxLength: 10, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -168,6 +169,36 @@ namespace CoffeeShop.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BaverageSizes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BaverageId = table.Column<int>(type: "int", nullable: false),
+                    SizeId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BaverageSizes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BaverageSizes_Baverages_BaverageId",
+                        column: x => x.BaverageId,
+                        principalTable: "Baverages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BaverageSizes_Sizes_SizeId",
+                        column: x => x.SizeId,
+                        principalTable: "Sizes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -198,6 +229,32 @@ namespace CoffeeShop.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Reservations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NameOnReservation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TimeOfReservation = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NumberOfPeople = table.Column<int>(type: "int", nullable: false),
+                    MyProperty = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reservations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reservations_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserUseCases",
                 columns: table => new
                 {
@@ -213,32 +270,6 @@ namespace CoffeeShop.DataAccess.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BaverageIngredientSizes",
-                columns: table => new
-                {
-                    BaverageIngredientId = table.Column<int>(type: "int", nullable: false),
-                    SizeId = table.Column<int>(type: "int", nullable: false),
-                    IngredientQuantity = table.Column<int>(type: "int", maxLength: 10, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BaverageIngredientSizes", x => new { x.BaverageIngredientId, x.SizeId });
-                    table.ForeignKey(
-                        name: "FK_BaverageIngredientSizes_BaverageIngredients_BaverageIngredientId",
-                        column: x => x.BaverageIngredientId,
-                        principalTable: "BaverageIngredients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BaverageIngredientSizes_Sizes_SizeId",
-                        column: x => x.SizeId,
-                        principalTable: "Sizes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -278,11 +309,6 @@ namespace CoffeeShop.DataAccess.Migrations
                 column: "IngredientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BaverageIngredientSizes_SizeId",
-                table: "BaverageIngredientSizes",
-                column: "SizeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Baverages_BaverageName",
                 table: "Baverages",
                 column: "BaverageName");
@@ -291,6 +317,21 @@ namespace CoffeeShop.DataAccess.Migrations
                 name: "IX_Baverages_CategoryId",
                 table: "Baverages",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Baverages_Description",
+                table: "Baverages",
+                column: "Description");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaverageSizes_BaverageId",
+                table: "BaverageSizes",
+                column: "BaverageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaverageSizes_SizeId",
+                table: "BaverageSizes",
+                column: "SizeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_Name",
@@ -319,6 +360,11 @@ namespace CoffeeShop.DataAccess.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reservations_UserId",
+                table: "Reservations",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
@@ -343,16 +389,25 @@ namespace CoffeeShop.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BaverageIngredientSizes");
+                name: "BaverageIngredients");
+
+            migrationBuilder.DropTable(
+                name: "BaverageSizes");
 
             migrationBuilder.DropTable(
                 name: "OrderLines");
 
             migrationBuilder.DropTable(
+                name: "Reservations");
+
+            migrationBuilder.DropTable(
                 name: "UserUseCases");
 
             migrationBuilder.DropTable(
-                name: "BaverageIngredients");
+                name: "Ingredients");
+
+            migrationBuilder.DropTable(
+                name: "Baverages");
 
             migrationBuilder.DropTable(
                 name: "Sizes");
@@ -361,19 +416,13 @@ namespace CoffeeShop.DataAccess.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Baverages");
-
-            migrationBuilder.DropTable(
-                name: "Ingredients");
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Roles");

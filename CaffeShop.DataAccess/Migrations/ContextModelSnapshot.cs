@@ -38,6 +38,9 @@ namespace CoffeeShop.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ImagePath")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -54,6 +57,8 @@ namespace CoffeeShop.DataAccess.Migrations
                     b.HasIndex("BaverageName");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("Description");
 
                     b.ToTable("Baverages");
                 });
@@ -89,26 +94,38 @@ namespace CoffeeShop.DataAccess.Migrations
                     b.ToTable("BaverageIngredients");
                 });
 
-            modelBuilder.Entity("CoffeeShop.Domain.BaverageIngredientSize", b =>
+            modelBuilder.Entity("CoffeeShop.Domain.BaverageSize", b =>
                 {
-                    b.Property<int>("BaverageIngredientId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BaverageId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SizeId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("IngredientQuantity")
-                        .HasMaxLength(10)
-                        .HasColumnType("int");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("BaverageIngredientId", "SizeId");
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaverageId");
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("BaverageIngredientSizes");
+                    b.ToTable("BaverageSizes");
                 });
 
             modelBuilder.Entity("CoffeeShop.Domain.Category", b =>
@@ -277,6 +294,44 @@ namespace CoffeeShop.DataAccess.Migrations
                     b.ToTable("Payments");
                 });
 
+            modelBuilder.Entity("CoffeeShop.Domain.Reservation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MyProperty")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NameOnReservation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumberOfPeople")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TimeOfReservation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reservations");
+                });
+
             modelBuilder.Entity("CoffeeShop.Domain.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -421,21 +476,21 @@ namespace CoffeeShop.DataAccess.Migrations
                     b.Navigation("Ingredient");
                 });
 
-            modelBuilder.Entity("CoffeeShop.Domain.BaverageIngredientSize", b =>
+            modelBuilder.Entity("CoffeeShop.Domain.BaverageSize", b =>
                 {
-                    b.HasOne("CoffeeShop.Domain.BaverageIngredient", "BaverageIngredient")
-                        .WithMany("BaverageIngredientSizes")
-                        .HasForeignKey("BaverageIngredientId")
+                    b.HasOne("CoffeeShop.Domain.Baverage", "Baverage")
+                        .WithMany("BaverageSizes")
+                        .HasForeignKey("BaverageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CoffeeShop.Domain.Size", "Size")
-                        .WithMany("baverageIngredientSizes")
+                        .WithMany("BaveragesSizes")
                         .HasForeignKey("SizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("BaverageIngredient");
+                    b.Navigation("Baverage");
 
                     b.Navigation("Size");
                 });
@@ -470,6 +525,17 @@ namespace CoffeeShop.DataAccess.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("CoffeeShop.Domain.Reservation", b =>
+                {
+                    b.HasOne("CoffeeShop.Domain.User", "User")
+                        .WithMany("Reservations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CoffeeShop.Domain.User", b =>
                 {
                     b.HasOne("CoffeeShop.Domain.Role", "Role")
@@ -495,11 +561,8 @@ namespace CoffeeShop.DataAccess.Migrations
             modelBuilder.Entity("CoffeeShop.Domain.Baverage", b =>
                 {
                     b.Navigation("BaverageIngredients");
-                });
 
-            modelBuilder.Entity("CoffeeShop.Domain.BaverageIngredient", b =>
-                {
-                    b.Navigation("BaverageIngredientSizes");
+                    b.Navigation("BaverageSizes");
                 });
 
             modelBuilder.Entity("CoffeeShop.Domain.Category", b =>
@@ -519,12 +582,14 @@ namespace CoffeeShop.DataAccess.Migrations
 
             modelBuilder.Entity("CoffeeShop.Domain.Size", b =>
                 {
-                    b.Navigation("baverageIngredientSizes");
+                    b.Navigation("BaveragesSizes");
                 });
 
             modelBuilder.Entity("CoffeeShop.Domain.User", b =>
                 {
                     b.Navigation("Orders");
+
+                    b.Navigation("Reservations");
 
                     b.Navigation("UseCases");
                 });

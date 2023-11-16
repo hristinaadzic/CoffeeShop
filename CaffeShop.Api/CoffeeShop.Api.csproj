@@ -13,14 +13,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\DTO\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CaffeShop.Application\CoffeeShop.Application.csproj" />
     <ProjectReference Include="..\CaffeShop.DataAccess\CoffeeShop.DataAccess.csproj" />
     <ProjectReference Include="..\CaffeShop.Domain\CoffeeShop.Domain.csproj" />
     <ProjectReference Include="..\CaffeShop.Implementation\CoffeeShop.Implementation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

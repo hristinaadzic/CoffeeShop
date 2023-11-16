@@ -16,5 +16,6 @@ namespace CoffeeShop.Domain
         public Role Role { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<UserUseCase> UseCases { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
     }
 }

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoffeeShop.Domain
+namespace CoffeeShop.Application.UseCases.DTO
 {
-    public class Size : Entity
+    public class SizeDto : Dto
     {
         public string SizeValue { get; set; }
-        public ICollection<BaverageSize> BaveragesSizes { get; set; }
     }
 }

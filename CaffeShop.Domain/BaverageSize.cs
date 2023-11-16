@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace CoffeeShop.Domain
 {
-    public class BaverageIngredientSize
+    public class BaverageSize : Entity
     {
-        public int BaverageIngredientId { get; set; }
+        public int BaverageId { get; set; }
         public int SizeId { get; set; }
-        public int IngredientQuantity { get; set; }
         public decimal Price { get; set; }
-        public BaverageIngredient BaverageIngredient { get; set; }
+        public Baverage Baverage { get; set; }
         public Size Size { get; set; }
-        //public ICollection<Price> Prices { get; set; }
     }
 }

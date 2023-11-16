@@ -25,14 +25,13 @@ namespace CoffeeShop.DataAccess
         {
             modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
             modelBuilder.Entity<UserUseCase>().HasKey(x => new { x.UserId, x.UseCaseId });
-            modelBuilder.Entity<BaverageIngredientSize>().HasKey(x => new { x.BaverageIngredientId, x.SizeId });
             base.OnModelCreating(modelBuilder);
         }
 
         public IApplicationUser User { get; }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
-        //    optionsBuilder.UseSqlServer(@"Data Source=LAPTOP-MUTLEBOJ\SQLEXPRESS;Initial Catalog=coffeeshop;Integrated Security=True");
+        //    optionsBuilder.UseSqlServer(@"Data Source=LAPTOP-MUTLEBOJ\SQLEXPRESS;Initial Catalog=coffeeshop2;Integrated Security=True");
         //}
 
         public override int SaveChanges()
@@ -59,16 +58,16 @@ namespace CoffeeShop.DataAccess
 
         public DbSet<Baverage> Baverages { get; set; }
         public DbSet<BaverageIngredient> BaverageIngredients { get; set; }
-        public DbSet<BaverageIngredientSize> BaverageIngredientSizes { get; set; }
+        public DbSet<BaverageSize> BaverageSizes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderLine> OrderLines { get; set; }
         public DbSet<Payment> Payments { get; set; }
-        //public DbSet<Price> Prices { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Size> Sizes { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserUseCase> UserUseCases { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
     }
 }
